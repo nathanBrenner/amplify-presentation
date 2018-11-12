@@ -1,0 +1,116 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="node_modules/reveal.js/css/reveal.css" />
+		<link rel="stylesheet" href="node_modules/reveal.js/css/theme/night.css" />
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<p>GraphQL: Let REST Rest in Peace</p>
+					<p>Nathan Brenner</p>
+				</section>
+				<section>
+					<p>What is REST?</p>
+					<aside class="notes">
+						REST stands for REpresentational State Transfer.
+
+						It means when a RESTful API is called, the server will transfer to the client a representation of the state of the requested resource.
+
+						CRUD: Create, Read, Update, Delete
+
+						Server with endpoints that the client hits to keep and change data
+					</aside>
+				</section>
+				<section>
+					<p>What is GraphQL?</p>
+					<aside class="notes">
+						Query language for client apps to make requests to the database with one endpoint.
+
+						The client is changing so much and so quickly.
+						Client has also become much more performant
+						Bottleneck: API
+					</aside>
+				</section>
+				<section>
+					<p>Query: GET</p>
+					<pre>
+						<code>
+type Giver {
+	id: ID!
+	name: String!
+	exclude: String
+	assignedTo: Giver
+}
+
+type Query {
+	getGiver(id: ID!): Giver
+}
+
+const getGiver = `query GetGiver($id: ID!) {
+	getGiver(id: $id) {
+		id
+		name
+		exclude
+		assignedTo {
+		id
+		name
+		exclude
+		}
+	}
+}
+`;
+
+this.http.post(graphqlEndpoint, getGiver);
+						</code>
+					</pre>
+				</section>
+				<section>
+					<p>Mutation: POST, PUT, DELETE</p>
+					<pre><code>
+type Giver {
+	id: ID!
+	name: String!
+	exclude: String
+	assignedTo: Giver
+}
+type Mutation {
+	createGiver(input: CreateGiverInput!): Giver
+}
+input CreateGiverGroupInput {
+	id: ID
+	name: String!
+}
+export const createGiver = `mutation CreateGiver($input: CreateGiverInput!) {
+createGiver(input: $input) {
+	id
+	name
+	exclude
+	assignedTo {
+		id
+		name
+		exclude
+		}
+	}
+}
+`;
+this.http.post(graphqlEndpoint, createGiver({ id: '1', name: 'foo'}))
+					</code></pre>
+				</section>
+				<Section>
+					GiftGiver meets AWS mobile, Amplify, AppSync
+
+					<aside class="notes">
+						Secret Santa
+
+						Rapid Development on AWS: React, Node, Graphql, Steve Kinney
+					</aside>
+				</Section>
+			</div>
+		</div>
+		<script src="node_modules/reveal.js/js/reveal.js"></script>
+		<script>
+			Reveal.initialize();
+		</script>
+	</body>
+</html>
